@@ -1,0 +1,93 @@
+version: '1.0.0'
+services:
+  smg-mysql:
+    build:
+      context: ./db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    restart: always
+    container_name: smg-mysql
+    image: smg-mysql
+    ports:
+      - 3306:3306
+
+  smg-redis:
+    image: redis:6.0
+    ports:
+      - 6379:6379
+    restart: always
+    container_name: smg-redis
+    hostname: smg-redis
+
+  smg-register:
+    build:
+      context: smg-register
+    restart: always
+    ports:
+      - 8848:8848
+    container_name: smg-register
+    hostname: smg-register
+    image: smg-register
+
+  smg-gateway:
+    build:
+      context: smg-gateway
+    restart: always
+    ports:
+      - 9999:9999
+    container_name: smg-gateway
+    hostname: smg-gateway
+    image: smg-gateway
+
+  smg-auth:
+    build:
+      context: ./smg-auth
+    restart: always
+    container_name: smg-auth
+    hostname: smg-auth
+    image: smg-auth
+
+  smg-upms:
+    build:
+      context: ./smg-upms/smg-upms-biz
+    restart: always
+    container_name: smg-upms
+    hostname: smg-upms
+    image: smg-upms
+
+  smg-monitor:
+    build:
+      context: ./smg-visual/smg-monitor
+    restart: always
+    ports:
+      - 5001:5001
+    container_name: smg-monitor
+    hostname: smg-monitor
+    image: smg-monitor
+
+  smg-sentinel:
+    build:
+      context: ./smg-visual/smg-sentinel-dashboard
+    restart: always
+    image: smg-sentinel
+    container_name: smg-sentinel
+    ports:
+      - 5003:5003
+
+  smg-codegen:
+    build:
+      context: ./smg-visual/smg-codegen
+    restart: always
+    container_name: smg-codegen
+    hostname: smg-codegen
+    image: smg-codegen
+
+  smg-job:
+    build:
+      context: ./smg-visual/smg-xxl-job-admin
+    restart: always
+    container_name: smg-job
+    hostname: smg-job
+    image: smg-job
+    ports:
+      - 5004:5004

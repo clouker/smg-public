@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.clc</groupId>
+        <artifactId>smg-public</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>smg-public-system</module>
+        <module>smg-public-gen</module>
+        <module>smg-public-job</module>
+        <module>smg-public-file</module>
+    </modules>
+
+    <artifactId>smg-public-modules</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        smg-public-modules业务模块
+    </description>
+
+</project>

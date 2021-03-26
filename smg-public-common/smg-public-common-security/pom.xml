@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.clc</groupId>
+        <artifactId>smg-public-common</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>smg-public-common-security</artifactId>
+
+    <description>
+        smg-public-common-security安全模块
+    </description>
+
+    <dependencies>
+
+        <!-- Api System -->
+        <dependency>
+            <groupId>org.clc</groupId>
+            <artifactId>smg-public-api-system</artifactId>
+        </dependency>
+
+        <!-- Common Redis-->
+        <dependency>
+            <groupId>org.clc</groupId>
+            <artifactId>smg-public-common-redis</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
