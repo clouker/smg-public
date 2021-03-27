@@ -15,8 +15,6 @@
     <artifactId>smg-public-api</artifactId>
     <packaging>pom</packaging>
 
-    <description>
-        smg-public-api系统接口
-    </description>
+    <description>smg-public-api系统接口</description>
 
 </project>

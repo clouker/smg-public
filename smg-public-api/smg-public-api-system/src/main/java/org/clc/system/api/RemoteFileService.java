@@ -15,6 +15,7 @@ import org.clc.system.api.factory.RemoteFileFallbackFactory;
  */
 @FeignClient(contextId = "remoteFileService", value = ServiceNameConstants.FILE_SERVICE, fallbackFactory = RemoteFileFallbackFactory.class)
 public interface RemoteFileService {
+
     /**
      * 上传文件
      *

@@ -11,9 +11,7 @@
     
     <artifactId>smg-public-common-datasource</artifactId>
 	
-    <description>
-        smg-public-common-datasource多数据源
-    </description>
+    <description>多数据源及Seata</description>
 
     <dependencies>
 

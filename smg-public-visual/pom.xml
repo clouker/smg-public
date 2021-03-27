@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <modules>
-        <module>smg-public-monitor</module>
+        <module>smg-public-visual-monitor</module>
     </modules>
 
     <artifactId>smg-public-visual</artifactId>

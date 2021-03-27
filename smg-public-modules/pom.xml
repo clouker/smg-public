@@ -8,18 +8,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <modules>
-        <module>smg-public-system</module>
-        <module>smg-public-gen</module>
-        <module>smg-public-job</module>
-        <module>smg-public-file</module>
-    </modules>
-
     <artifactId>smg-public-modules</artifactId>
     <packaging>pom</packaging>
 
-    <description>
-        smg-public-modules业务模块
-    </description>
+    <description>业务模块</description>
+
+    <modules>
+        <module>smg-public-modules-system</module>
+        <module>smg-public-modules-gen</module>
+        <module>smg-public-modules-job</module>
+        <module>smg-public-modules-file</module>
+    </modules>
+
 
 </project>

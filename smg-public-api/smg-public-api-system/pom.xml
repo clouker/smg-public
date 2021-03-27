@@ -14,7 +14,6 @@
     <description>smg-public-api-system系统接口模块</description>
 
     <dependencies>
-
         <!-- Common Core-->
         <dependency>
             <groupId>org.clc</groupId>

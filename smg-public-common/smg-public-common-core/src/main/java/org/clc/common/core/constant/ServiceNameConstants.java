@@ -12,10 +12,10 @@ public class ServiceNameConstants {
     /**
      * 系统模块的serviceid
      */
-    public static final String SYSTEM_SERVICE = "smg-public-system";
+    public static final String SYSTEM_SERVICE = "smg-public-modules-system";
 
     /**
      * 文件服务的serviceid
      */
-    public static final String FILE_SERVICE = "smg-public-file";
+    public static final String FILE_SERVICE = "smg-public-modules-file";
 }

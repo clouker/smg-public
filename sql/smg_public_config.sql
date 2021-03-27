@@ -8,7 +8,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 USE smg_public_config;
 
 /******************************************/
-/*   数据库全名 = nacos_config   */
+/*   数据库全名 = smg_public_config   */
 /*   表名称 = config_info   */
 /******************************************/
 DROP TABLE IF EXISTS `config_info`;
@@ -32,48 +32,57 @@ CREATE TABLE `config_info`
     `c_schema`     text,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`, `group_id`, `tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='config_info';
 
--- ----------------------------
--- Records of config_info
--- ----------------------------
-BEGIN;
-INSERT INTO `config_info`
-VALUES (1, 'application-dev.yml', 'DEFAULT_GROUP',
-        '# 加解密根密码\njasypt:\n  encryptor:\n    password: smg #根密码\n\n# Spring 相关\nspring:\n  redis:\n    password: 123456\n    host: 192.168.0.103\n  cloud:\n    sentinel:\n      eager: true\n      transport:\n        dashboard: ${SENTINEL_HOST:127.0.0.1}:${SENTINEL-PORT:5003}\n\n# 暴露监控端点\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: \'*\'\n\n# feign 配置\nfeign:\n  sentinel:\n    enabled: true\n  okhttp:\n    enabled: true\n  httpclient:\n    enabled: false\n  client:\n    config:\n      default:\n        connectTimeout: 10000\n        readTimeout: 10000\n  compression:\n    request:\n      enabled: true\n    response:\n      enabled: true\n\n# mybaits-plus配置\nmybatis-plus:\n  mapper-locations: classpath:/mapper/*Mapper.xml\n  global-config:\n    banner: false\n    db-config:\n      id-type: auto\n      table-underline: true\n      logic-delete-value: 1\n      logic-not-delete-value: 0\n  configuration:\n    map-underscore-to-camel-case: true\n\n# spring security 配置\nsecurity:\n  oauth2:\n    resource:\n      loadBalanced: true\n      token-info-uri: http://smg-auth/oauth/check_token\n    # 通用放行URL，服务个性化，请在对应配置文件覆盖\n    ignore:\n      urls:\n        - /v2/api-docs\n        - /actuator/**\n# swagger 配置\nswagger:\n  title: Smg Swagger API\n  license: Powered By smg-public\n  licenseUrl: https://ooo.com\n  terms-of-service-url: https://ooo.com\n  contact:\n    email: wangiegie@gmail.com\n    url: https://ooo.com\n  authorization:\n    name: smg OAuth\n    auth-regex: ^.*$\n    authorization-scope-list:\n      - scope: server\n        description: server all\n    token-url-list:\n      - http://${GATEWAY_HOST:127.0.0.1}:${GATEWAY-PORT:9999}/auth/oauth/token',
-        '9a17f1e09f13f48de43977954dc2bd66', '2019-11-29 16:31:20', '2020-12-23 11:35:46', NULL, '0:0:0:0:0:0:0:1', '',
-        '', '通用配置', 'null', 'null', 'yaml', 'null');
+insert into config_info(id, data_id, group_id, content, md5, gmt_create, gmt_modified, src_user, src_ip, app_name,
+                        tenant_id, c_desc, c_use, effect, type, c_schema)
+values (1, 'application-dev.yml', 'DEFAULT_GROUP',
+        'spring:\n  main:\n    allow-bean-definition-overriding: true\n  autoconfigure:\n    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure\n\n#请求处理的超时时间\nribbon:\n  ReadTimeout: 10000\n  ConnectTimeout: 10000\n\n# feign 配置\nfeign:\n  sentinel:\n    enabled: true\n  okhttp:\n    enabled: true\n  httpclient:\n    enabled: false\n  client:\n    config:\n      default:\n        connectTimeout: 10000\n        readTimeout: 10000\n  compression:\n    request:\n      enabled: true\n    response:\n      enabled: true\n\n# 暴露监控端点\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: \' *\'\n',
+        'c07e6f7321493f6d5390d0a08bffb75a', '2019-11-29 16:31:20', '2020-12-21 15:29:24', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '通用配置', 'null', 'null', 'yaml', 'null'),
 
-INSERT INTO `config_info`
-VALUES (2, 'smg-auth-dev.yml', 'DEFAULT_GROUP',
-        '# 数据源\nspring:\n  datasource:\n    type: com.zaxxer.hikari.HikariDataSource\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    username: root\n    password: imissyou\n    url: jdbc:mysql://${MYSQL-HOST:192.168.0.103}:${MYSQL-PORT:3306}/${MYSQL-DB:smg_public_base}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai\n  freemarker:\n    allow-request-override: false\n    allow-session-override: false\n    cache: true\n    charset: UTF-8\n    check-template-location: true\n    content-type: text/html\n    enabled: true\n    expose-request-attributes: false\n    expose-session-attributes: false\n    expose-spring-macro-helpers: true\n    prefer-file-system-access: true\n    suffix: .ftl\n    template-loader-path: classpath:/templates/',
-        '58b1b48a2888f49e667864be32edf9c1', '2019-11-29 16:31:48', '2020-01-01 18:30:58', NULL, '127.0.0.1', '', '',
-        '认证中心配置', 'null', 'null', 'yaml', 'null');
+       (2, 'smg-public-gateway-dev.yml', 'DEFAULT_GROUP',
+        'spring:\r\n  redis:\r\n    host: 192.168.0.103\r\n    port: 6379\r\n    password: 123456 \r\n  cloud:\r\n    gateway:\r\n      discovery:\r\n        locator:\r\n          lowerCaseServiceId: true\r\n          enabled: true\r\n      routes:\r\n        # 认证中心\r\n        - id: smg-public-auth\r\n          uri: lb://smg-public-auth\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            # 验证码处理\r\n            - CacheRequestFilter\r\n            - ValidateCodeFilter\r\n            - StripPrefix=1\r\n        # 代码生成\r\n        - id: smg-public-modules-gen\r\n          uri: lb://smg-public-modules-gen\r\n          predicates:\r\n            - Path=/code/**\r\n          filters:\r\n            - StripPrefix=1\r\n        # 定时任务\r\n        - id: smg-public-modules-job\r\n          uri: lb://smg-public-modules-job\r\n          predicates:\r\n            - Path=/schedule/**\r\n          filters:\r\n            - StripPrefix=1\r\n        # 系统模块\r\n        - id: smg-public-modules-system\r\n          uri: lb://smg-public-modules-system\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            - StripPrefix=1\r\n        # 文件服务\r\n        - id: smg-public-modules-file\r\n          uri: lb://smg-public-modules-file\r\n          predicates:\r\n            - Path=/file/**\r\n          filters:\r\n            - StripPrefix=1\r\n\r\n# 不校验白名单\r\nignore:\r\n  whites:\r\n    - /auth/logout\r\n    - /auth/login\r\n    - /*/v2/api-docs\r\n    - /csrf\r\n',
+        'ef4a58daf989827334b3aac1c9d68392', '2020-05-14 14:17:55', '2020-11-18 17:53:23', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '网关模块', 'null', 'null', 'yaml', 'null'),
 
-INSERT INTO `config_info`
-VALUES (3, 'smg-codegen-dev.yml', 'DEFAULT_GROUP',
-        '## spring security 配置\nsecurity:\n  oauth2:\n    client:\n      client-id: ENC(IfsQgj7nPZfAmZ4CDwr9Og==)      # gen\n      client-secret: ENC(lt9KpIU4XxsnrXEpRJQPEg==)    # gen\n      scope: server\n\n# 数据源配置\nspring:\n  datasource:\n    type: com.zaxxer.hikari.HikariDataSource\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    username: root\n    password: imissyou\n    url: jdbc:mysql://${MYSQL-HOST:192.168.0.103}:${MYSQL-PORT:3306}/${MYSQL-DB:smg_public_codegen}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai\n  resources:\n    static-locations: classpath:/static/,classpath:/views/\n\n# 直接放行URL\nignore:\n  urls:\n    - /v2/api-docs\n    - /actuator/**\n',
-        'abc702838b34d11b46e96143ccd9f367', '2019-11-29 16:32:12', '2019-11-29 16:32:12', NULL, '127.0.0.1', '', '',
-        '代码生成配置', NULL, NULL, 'yaml', NULL);
+       (3, 'smg-public-auth-dev.yml', 'DEFAULT_GROUP',
+        'spring: \r\n  redis:\r\n    host: 192.168.0.103\r\n    port: 6379 \r\n    password: 123456 \r\n',
+        'b7354e1eb62c2d846d44a796d9ec6930', '2020-11-20 00:00:00', '2021-02-28 21:06:58', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '认证中心', 'null', 'null', 'yaml', 'null'),
 
-INSERT INTO `config_info`
-VALUES (4, 'smg-gateway-dev.yml', 'DEFAULT_GROUP',
-        'spring:\n  cloud:\n    gateway:\n      locator:\n        enabled: true\n      routes:\n        # 认证中心\n        - id: smg-auth\n          uri: lb://smg-auth\n          predicates:\n            - Path=/auth/**\n          filters:\n            # 验证码处理\n            - ValidateCodeGatewayFilter\n            # 前端密码解密\n            - PasswordDecoderFilter\n        #UPMS 模块\n        - id: smg-upms-biz\n          uri: lb://smg-upms-biz\n          predicates:\n            - Path=/admin/**\n          filters:\n            # 限流配置\n            - name: RequestRateLimiter\n              args:\n                key-resolver: \'#{@remoteAddrKeyResolver}\'\n                redis-rate-limiter.replenishRate: 100\n                redis-rate-limiter.burstCapacity: 200\n        # 代码生成模块\n        - id: smg-codegen\n          uri: lb://smg-codegen\n          predicates:\n            - Path=/gen/**\n\n\ngateway:\n  encode-key: \'hello,smg_public\'\n  ignore-clients:\n    - test\n\nswagger:\n  ignore-providers:\n    - smg-auth\n    - smg-codegen\n',
-        '5cd71b235930c78e700819b944a14446', '2019-11-29 16:32:42', '2020-10-09 17:10:45', NULL, '0:0:0:0:0:0:0:1', '',
-        '', '网关配置', '', '', 'yaml', '');
+       (4, 'smg-public-visual-monitor-dev.yml', 'DEFAULT_GROUP',
+        '# spring\r\nspring: \r\n  security:\r\n    user:\r\n      name: smg\r\n      password: 123456 \r\n  boot:\r\n    admin:\r\n      ui:\r\n        title: 服务状态监控\r\n',
+        'd8997d0707a2fd5d9fc4e8409da38129', '2020-11-20 00:00:00', '2020-12-21 16:28:07', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '监控中心', 'null', 'null', 'yaml', 'null'),
 
-INSERT INTO `config_info`
-VALUES (5, 'smg-monitor-dev.yml', 'DEFAULT_GROUP',
-        'spring:\n  # 安全配置\n  security:\n    user:\n      name: ENC(3T1YJoRCXGR115R2wipJ5Q==)     # monitor\n      password: ENC(uvVrUIcqVBEw2oDrIxDhrA==) # monitor\n',
-        '85509c6f8c67c364dc78301896274f26', '2019-11-29 16:33:05', '2019-11-29 16:33:05', NULL, '127.0.0.1', '', '',
-        '监控配置', NULL, NULL, 'yaml', NULL);
+       (5, 'smg-public-modules-system-dev.yml', 'DEFAULT_GROUP',
+        '# spring配置\r\nspring: \r\n  redis:\r\n    host: 192.168.0.103\r\n    port: 6379\r\n    password: 123456 \r\n  datasource:\r\n    druid:\r\n      stat-view-servlet:\r\n        enabled: true\r\n        loginUsername: admin\r\n        loginPassword: 123456\r\n    dynamic:\r\n      druid:\r\n        initial-size: 5\r\n        min-idle: 5\r\n        maxActive: 20\r\n        maxWait: 60000\r\n        timeBetweenEvictionRunsMillis: 60000\r\n        minEvictableIdleTimeMillis: 300000\r\n        validationQuery: SELECT 1 FROM DUAL\r\n        testWhileIdle: true\r\n        testOnBorrow: false\r\n        testOnReturn: false\r\n        poolPreparedStatements: true\r\n        maxPoolPreparedStatementPerConnectionSize: 20\r\n        filters: stat,wall,slf4j\r\n        connectionProperties: druid.stat.mergeSql\\=true;druid.stat.slowSqlMillis\\=5000\r\n      datasource:\r\n          # 主库数据源\r\n          master:\r\n            driver-class-name: com.mysql.cj.jdbc.Driver\r\n            url: jdbc:mysql://${MYSQL-HOST:192.168.0.103}:${MYSQL-PORT:3306}/smg_public_base?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8\r\n            username: root\r\n            password: imissyou\r\n          # 从库数据源\r\n          # slave:\r\n            # username: \r\n            # password: \r\n            # url: \r\n            # driver-class-name: \r\n      # seata: true    # 开启seata代理，开启后默认每个数据源都代理，如果某个不需要代理可单独关闭\r\n\r\n# seata配置\r\nseata:\r\n  # 默认关闭，如需启用spring.datasource.dynami.seata需要同时开启\r\n  enabled: false\r\n  # Seata 应用编号，默认为 ${spring.application.name}\r\n  application-id: ${spring.application.name}\r\n  # Seata 事务组编号，用于 TC 集群名\r\n  tx-service-group: ${spring.application.name}-group\r\n  # 关闭自动代理\r\n  enable-auto-data-source-proxy: false\r\n  # 服务配置项\r\n  service:\r\n    # 虚拟组和分组的映射\r\n    vgroup-mapping:\r\n      smg-public-modules-system-group: default\r\n  config:\r\n    type: nacos\r\n    nacos:\r\n      serverAddr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}\r\n      group: SEATA_GROUP\r\n      namespace:\r\n  registry:\r\n    type: nacos\r\n    nacos:\r\n      application: seata-server\r\n      server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}\r\n      namespace:\r\n\r\n# mybatis配置\r\nmybatis:\r\n    # 搜索指定包别名\r\n    typeAliasesPackage: org.clc.system\r\n    # 配置mapper的扫描，找到所有的mapper.xml映射文件\r\n    mapperLocations: classpath:mapper/**/*.xml\r\n\r\n# swagger配置\r\nswagger:\r\n  title: 系统模块接口文档\r\n  license: Powered By smg-public \r\n  licenseUrl: https://oo.oo',
+        'ac8913dee679e65bb7d482df5f267d4e', '2020-11-20 00:00:00', '2021-01-27 10:42:25', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '系统模块', 'null', 'null', 'yaml', 'null'),
 
-INSERT INTO `config_info`
-VALUES (6, 'smg-upms-biz-dev.yml', 'DEFAULT_GROUP',
-        'security:\n  oauth2:\n    client:\n      client-id: ENC(qxBTYFHL5h5czVj9SLzotg==)         # admin\n      client-secret: ENC(TMaThC5vkYnPEbrdUY3phA==)      # admin\n      scope: server\n\n# 数据源\nspring:\n  datasource:\n    type: com.zaxxer.hikari.HikariDataSource\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    username: root\n    password: imissyou\n    url: jdbc:mysql://${MYSQL-HOST:192.168.0.103}:${MYSQL-PORT:3306}/${MYSQL-DB:smg_public_base}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai\n',
-        '3248f7cf9ea2ce40cd41cd664ec32ae0', '2019-11-29 16:52:32', '2020-03-14 16:24:24', NULL, '172.17.0.125', '', '',
-        '统一权限', 'null', 'null', 'yaml', 'null');
-COMMIT;
+       (6, 'smg-public-modules-gen-dev.yml', 'DEFAULT_GROUP',
+        '# spring配置\r\nspring: \r\n  redis:\r\n    host: 192.168.0.103\r\n    port: 6379\r\n    password: 123456 \r\n  datasource: \r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    url: jdbc:mysql://${MYSQL-HOST:192.168.0.103}:${MYSQL-PORT:3306}/smg_public_base?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8\r\n    username: root\r\n    password: password\r\n\r\n# mybatis配置\r\nmybatis:\r\n    # 搜索指定包别名\r\n    typeAliasesPackage: org.clc.gen.domain\r\n    # 配置mapper的扫描，找到所有的mapper.xml映射文件\r\n    mapperLocations: classpath:mapper/**/*.xml\r\n\r\n# swagger配置\r\nswagger:\r\n  title: 代码生成接口文档\r\n  license: Powered By smg\r\n  licenseUrl: https://clc.org\r\n\r\n# 代码生成\r\ngen: \r\n  # 作者\r\n  author: smg\r\n  # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool\r\n  packageName: org.clc.system\r\n  # 自动去除表前缀，默认是false\r\n  autoRemovePre: false\r\n  # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）\r\n  tablePrefix: sys_\r\n',
+        '8c79f64a4cca9b821a03dc8b27a2d8eb', '2020-11-20 00:00:00', '2021-01-26 10:36:45', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '代码生成', 'null', 'null', 'yaml', 'null'),
+
+       (7, 'smg-public-modules-job-dev.yml', 'DEFAULT_GROUP',
+        '# spring配置\r\nspring: \r\n  redis:\r\n    host: 192.168.0.103\r\n    port: 6379\r\n    password: 123456 \r\n  datasource:\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    url: jdbc:mysql://${MYSQL-HOST:192.168.0.103}:${MYSQL-PORT:3306}/smg_public_base?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8\r\n    username: root\r\n    password: password\r\n\r\n# mybatis配置\r\nmybatis:\r\n    # 搜索指定包别名\r\n    typeAliasesPackage: org.clc.job.domain\r\n    # 配置mapper的扫描，找到所有的mapper.xml映射文件\r\n    mapperLocations: classpath:mapper/**/*.xml\r\n\r\n# swagger配置\r\nswagger:\r\n  title: 定时任务接口文档\r\n  license: Powered By smg\r\n  licenseUrl: https://clc.org\r\n',
+        'd6dfade9a2c93c463ae857cd503cb172', '2020-11-20 00:00:00', '2021-01-26 10:36:04', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '定时任务', 'null', 'null', 'yaml', 'null'),
+
+       (8, 'smg-public-modules-file-dev.yml', 'DEFAULT_GROUP',
+        '# 本地文件上传    \r\nfile:\r\n    domain: http://127.0.0.1:9300\r\n    path: D:/smg-public/uploadPath\r\n    prefix: /statics\r\n\r\n# FastDFS配置\r\nfdfs:\r\n  domain: http://8.129.231.12\r\n  soTimeout: 3000\r\n  connectTimeout: 2000\r\n  trackerList: 8.129.231.12:22122\r\n\r\n# Minio配置\r\nminio:\r\n  url: http://8.129.231.12:9000\r\n  accessKey: minioadmin\r\n  secretKey: minioadmin\r\n  bucketName: test',
+        '5382b93f3d8059d6068c0501fdd41195', '2020-11-20 00:00:00', '2020-12-21 21:01:59', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '文件服务', 'null', 'null', 'yaml', 'null'),
+
+       (9, 'sentinel-smg-public-gateway', 'DEFAULT_GROUP',
+        '[\r\n    {\r\n        \"resource\": \"smg-public-auth\",\r\n        \"count\": 500,\r\n        \"grade\": 1,\r\n        \"limitApp\": \"default\",\r\n        \"strategy\": 0,\r\n        \"controlBehavior\": 0\r\n    },\r\n	{\r\n        \"resource\": \"smg-public-modules-system\",\r\n        \"count\": 1000,\r\n        \"grade\": 1,\r\n        \"limitApp\": \"default\",\r\n        \"strategy\": 0,\r\n        \"controlBehavior\": 0\r\n    },\r\n	{\r\n        \"resource\": \"smg-public-gen\",\r\n        \"count\": 200,\r\n        \"grade\": 1,\r\n        \"limitApp\": \"default\",\r\n        \"strategy\": 0,\r\n        \"controlBehavior\": 0\r\n    },\r\n	{\r\n        \"resource\": \"smg-public-job\",\r\n        \"count\": 300,\r\n        \"grade\": 1,\r\n        \"limitApp\": \"default\",\r\n        \"strategy\": 0,\r\n        \"controlBehavior\": 0\r\n    }\r\n]',
+        '9f3a3069261598f74220bc47958ec252', '2020-11-20 00:00:00', '2020-11-20 00:00:00', NULL, '0:0:0:0:0:0:0:1', '',
+        '', '限流策略', 'null', 'null', 'json', 'null');
+
 
 /******************************************/
 /*   表名称 = config_info_aggr   */
@@ -90,8 +99,10 @@ CREATE TABLE `config_info_aggr`
     `app_name`     varchar(128) DEFAULT NULL,
     `tenant_id`    varchar(128) DEFAULT '' COMMENT '租户字段',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`,`group_id`,`tenant_id`,`datum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='增加租户字段';
+    UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`, `group_id`, `tenant_id`, `datum_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='增加租户字段';
 
 
 /******************************************/
@@ -113,8 +124,10 @@ CREATE TABLE `config_info_beta`
     `src_ip`       varchar(50)           DEFAULT NULL COMMENT 'source ip',
     `tenant_id`    varchar(128)          DEFAULT '' COMMENT '租户字段',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_beta';
+    UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`, `group_id`, `tenant_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='config_info_beta';
 
 /******************************************/
 /*   表名称 = config_info_tag   */
@@ -135,8 +148,10 @@ CREATE TABLE `config_info_tag`
     `src_user`     text COMMENT 'source user',
     `src_ip`       varchar(50)           DEFAULT NULL COMMENT 'source ip',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`,`group_id`,`tenant_id`,`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_tag';
+    UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`, `group_id`, `tenant_id`, `tag_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='config_info_tag';
 
 /******************************************/
 /*   表名称 = config_tags_relation   */
@@ -152,9 +167,11 @@ CREATE TABLE `config_tags_relation`
     `tenant_id` varchar(128) DEFAULT '' COMMENT 'tenant_id',
     `nid`       bigint(20)   NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (`nid`),
-    UNIQUE KEY `uk_configtagrelation_configidtag` (`id`,`tag_name`,`tag_type`),
-    KEY         `idx_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_tag_relation';
+    UNIQUE KEY `uk_configtagrelation_configidtag` (`id`, `tag_name`, `tag_type`),
+    KEY `idx_tenant_id` (`tenant_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='config_tag_relation';
 
 /******************************************/
 /*   表名称 = group_capacity   */
@@ -174,7 +191,9 @@ CREATE TABLE `group_capacity`
     `gmt_modified`      datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='集群、各Group容量信息表';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='集群、各Group容量信息表';
 
 /******************************************/
 /*   表名称 = his_config_info   */
@@ -196,10 +215,12 @@ CREATE TABLE `his_config_info`
     `op_type`      char(10)                     DEFAULT NULL,
     `tenant_id`    varchar(128)                 DEFAULT '' COMMENT '租户字段',
     PRIMARY KEY (`nid`),
-    KEY            `idx_gmt_create` (`gmt_create`),
-    KEY            `idx_gmt_modified` (`gmt_modified`),
-    KEY            `idx_did` (`data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='多租户改造';
+    KEY `idx_gmt_create` (`gmt_create`),
+    KEY `idx_gmt_modified` (`gmt_modified`),
+    KEY `idx_did` (`data_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='多租户改造';
 
 
 /******************************************/
@@ -220,7 +241,9 @@ CREATE TABLE `tenant_capacity`
     `gmt_modified`      datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='租户容量信息表';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='租户容量信息表';
 
 /******************************************/
 /*   表名称 = tenant_info   */
@@ -237,9 +260,11 @@ CREATE TABLE `tenant_info`
     `gmt_create`    bigint(20)   NOT NULL COMMENT '创建时间',
     `gmt_modified`  bigint(20)   NOT NULL COMMENT '修改时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_tenant_info_kptenantid` (`kp`,`tenant_id`),
-    KEY             `idx_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tenant_info';
+    UNIQUE KEY `uk_tenant_info_kptenantid` (`kp`, `tenant_id`),
+    KEY `idx_tenant_id` (`tenant_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_bin COMMENT ='tenant_info';
 
 /******************************************/
 /*   表名称 = users   */
